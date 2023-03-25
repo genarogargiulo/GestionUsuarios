@@ -1,8 +1,8 @@
 {
-    "name": "node-template",
+    "name": "gestion-usuarios",
     "version": "1.0.0",
     "type": "module",
-    "description": "Plantilla base para los proyectos desarrollados en el curso de Node.JS de la plataforma LearnThis Academy",
+    "description": "Gestion de usuarios con Node.js",
     "scripts": {
         "dev": "nodemon src/index.js",
         "start": "node src/index.js",
@@ -12,10 +12,15 @@
         "postinstall": "npm run prepare"
     },
     "author": {
-        "name": "LearnThis Academy",
-        "url": "https://learnthisacademy.com"
+        "name": "Genaro",
+        "url": "IG:gargiugen"
     },
     "license": "MIT",
+    "dependencies": {
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "mongoose": "^7.0.3"
+    },
     "devDependencies": {
         "eslint": "8.26.0",
         "eslint-config-prettier": "8.5.0",
@@ -29,7 +34,12 @@
         "prettier": "2.7.1"
     },
     "imports": {
-        "#Lib/*": "./src/lib/*"
+        "#Lib/*": "./src/lib/*",
+        "#Config/*": "./src/config/*",
+        "#Controllers/*": "./src/controllers/*",
+        "#Dto/*": "./src/dto/*",
+        "#Routes/*": "./src/routes/*",
+        "#Schemas/*": "./src/schemas/*"
     },
     "lint-staged": {
         "*.js": "eslint --fix",
