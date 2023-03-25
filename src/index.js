@@ -4,6 +4,8 @@ import connectDB from "#Config/db.js";
 
 const bootstrap = async () => {
 
+    console.clear();
+
     await connectDB(process.env.MONGODB_URL);
 
     httpServer.listen(process.env.PORT, () => {
