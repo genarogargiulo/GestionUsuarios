@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minLenght:10, maxLenght:25 },
   createdAt: { type: Date, required: false, default: Date.now },
+
 });
 
 const userModel = mongoose.model("User", userSchema);
