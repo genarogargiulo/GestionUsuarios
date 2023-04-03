@@ -1,30 +1,32 @@
 import UserModel from "#Schemas/user.schema.js";
-import { hash } from "bcrypt"; // libreria que nos permite encriptar datos
+import { compare } from "bcrypt";
+import { SignJWT } from "jose"; // libreria que nos permite encriptar datos
 
-const userRegisterController = async (req, res) => {
+const userLoginController = async (req, res) => {
     //  obtenemos los datos del body del mensaje
-    const { _id, name, surname, email, password } = req.body;
-    // validamos si ya existe un usuario con ese ID
-    const existingUserById = await UserModel.findById(_id).exec();
-
-    if (existingUserById) return res.status(409).send('Usuario existente');
+    const { email, password } = req.body;
 
     // validamos si ya existe un usuario con ese email
     const existingUserByEmail = await UserModel.findOne({email}).exec();
 
-    if (existingUserByEmail) return res.status(409).send('Email existente');
+    if (!existingUserByEmail) return res.status(401).send('Credencial incorrecta');
 
-    // Generamos una hash para guardar la constraseña
-    const hashedPassword = await hash(password, 10);
-    const user = new UserModel(
-        { _id, name, surname, email, password: hashedPassword }
-    )
+    const checkPassword = await compare(password, existingUserByEmail.password);
 
-    //  guardamos el usuario en BD
-    await user.save();
+    if (!checkPassword) return res.status(401).send('Credencial incorrecta');
 
-    res.send('Usuario registrado con exito!')
+    const jwtConstructor = new SignJWT({
+        id: existingUserByEmail._id
+    });
+
+    const encoder = new TextEncoder();
+    const jwt = await jwtConstructor.setProtectedHeader({
+        alg: 'HS256',
+        typ: 'JWT'
+    }).setIssuedAt().setExpirationTime('7d').sign(encoder.encode(process.env.JWT_PRIVATE_KEY));
+
+    return res.send( {jwt} );
 };
 
 
-export default userRegisterController;
+export default userLoginController;
